@@ -15,7 +15,7 @@
 #include <UI/Qt/WebContentView.h>
 
 #import <Cocoa/Cocoa.h>
-#import <UI/Qt/DictionaryLookup.h>
+#import <UI/AppKit/Utilities/DictionaryLookup.h>
 #import <objc/runtime.h>
 
 @interface LadybirdWindowControlOffsetObserver : NSObject

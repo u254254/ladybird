@@ -74,10 +74,10 @@ endif()
 
 if (APPLE)
     target_sources(ladybird PRIVATE
-        ApplicationIcon.mm
-        Conversions.mm
-        DictionaryLookup.mm
-        ExternalURLHandler.mm
+        ../AppKit/Utilities/ApplicationIcon.mm
+        ../AppKit/Utilities/Conversions.mm
+        ../AppKit/Utilities/DictionaryLookup.mm
+        ../AppKit/Utilities/ExternalURLHandler.mm
         LadybirdAccessibilityElement.mm
         MacWindow.mm
         Menu.mm

@@ -7,7 +7,7 @@
 #include <LibWebView/Profile.h>
 
 #import <Cocoa/Cocoa.h>
-#import <UI/Qt/ApplicationIcon.h>
+#import <UI/AppKit/Utilities/ApplicationIcon.h>
 
 namespace Ladybird {
 

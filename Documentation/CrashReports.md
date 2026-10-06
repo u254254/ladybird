@@ -91,7 +91,7 @@ process remains dormant until the user chooses a recovery action. The crash
 screen provides reload and report review actions directly in the browser
 process. LibWebView's `CrashReportReview` prepares a report for display and
 validates the user's choices, and `CrashReportSubmission` sends it to the report
-server; the Qt UI only presents them.
+server; the AppKit and Qt UIs only presents them.
 
 The browser creates an unlinked temporary file before spawning each helper and
 passes a descriptor to the child. The child cannot access the report directory.

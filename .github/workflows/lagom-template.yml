@@ -175,9 +175,17 @@ jobs:
 
       # === BUILD ===
 
-      - name: Build
+      - name: Build with Qt
+        if: ${{ inputs.os_name == 'macOS' && inputs.build_preset == 'Sanitizer' }}
+        working-directory: ${{ github.workspace }}
+        run: |
+          cmake --preset ${{ inputs.build_preset }} -B Build -DLADYBIRD_GUI_FRAMEWORK=Qt
+          cmake --build Build
+
+      - name: Build with AppKit
         working-directory: ${{ github.workspace }}/Build
         run: |
+          cmake --preset ${{ inputs.build_preset }} -B Build -DLADYBIRD_GUI_FRAMEWORK=AppKit
           cmake --build .
           cmake --install . --strip --prefix "${GITHUB_WORKSPACE}/Install"
 
@@ -200,7 +208,6 @@ jobs:
           compression-level: 0
           retention-days: 3
           if-no-files-found: error
-
 
       - name: Save Caches
         uses: ./.github/actions/cache-save

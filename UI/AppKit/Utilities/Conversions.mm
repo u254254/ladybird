@@ -7,7 +7,7 @@
 
 #include <LibGfx/ImageFormats/PNGWriter.h>
 
-#import <UI/Qt/Conversions.h>
+#import <UI/AppKit/Utilities/Conversions.h>
 
 namespace Ladybird {
 

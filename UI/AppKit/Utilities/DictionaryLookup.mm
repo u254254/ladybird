@@ -7,7 +7,7 @@
 #include <AK/String.h>
 #include <LibWebCommon/WebView/DictionaryLookup.h>
 
-#import <UI/Qt/DictionaryLookup.h>
+#import <UI/AppKit/Utilities/DictionaryLookup.h>
 
 namespace Ladybird {
 
