@@ -8,7 +8,7 @@
 
 #include <AK/Optional.h>
 #include <AK/StringView.h>
-#include <LibCompositing/PageId.h>
+#include <LibWebCommon/Page/PageId.h>
 #include <LibURL/URL.h>
 #include <LibWebCommon/HTML/ActivateTab.h>
 #include <LibWebView/BrowsingSession.h>
@@ -66,8 +66,7 @@ private:
 - (nonnull TabController*)createChildTab:(Optional<URL::URL> const&)url
                                  fromTab:(nonnull Tab*)tab
                              activateTab:(Web::HTML::ActivateTab)activate_tab
-                             pageProcess:(WebView::WebContentClient&)page_process
-                               pageIndex:(Compositing::PageId)page_index;
+                             traversable:(WebView::CanonicalTraversable&)traversable;
 
 - (void)setActiveTab:(nonnull Tab*)tab;
 - (nullable Tab*)activeTab;

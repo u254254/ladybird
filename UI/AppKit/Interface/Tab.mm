@@ -135,10 +135,9 @@ static NSImage* tab_loading_spinner_icon(NSUInteger frame)
 }
 
 - (instancetype)initAsChild:(Tab*)parent
-                pageProcess:(WebView::WebContentClient&)page_process
-                  pageIndex:(Compositing::PageId)page_index
+                traversable:(WebView::CanonicalTraversable&)traversable
 {
-    auto* web_view = [[LadybirdWebView alloc] initAsChild:self parent:[parent web_view] pageProcess:page_process pageIndex:page_index];
+    auto* web_view = [[LadybirdWebView alloc] initAsChild:self parent:[parent web_view] traversable:traversable];
     return [self initWithWebView:web_view];
 }
 
@@ -262,7 +261,7 @@ static NSImage* tab_loading_spinner_icon(NSUInteger frame)
     if (!WebView::Application::settings().config_variable_as_bool(WebView::ConfigVariableID::ShowWebContentProcessIDInTabTitle))
         return self.page_title;
 
-    auto title = MUST(String::formatted("{} [{}]", Ladybird::ns_string_to_string(self.page_title), [[self web_view] view].client().pid()));
+    auto title = MUST(String::formatted("{} [{}]", Ladybird::ns_string_to_string(self.page_title), [[self web_view] view].page().client().pid()));
     return Ladybird::string_to_ns_string(title);
 }
 
@@ -409,16 +408,14 @@ static NSImage* tab_loading_spinner_icon(NSUInteger frame)
 
 - (String const&)onCreateChildTab:(Optional<URL::URL> const&)url
                       activateTab:(Web::HTML::ActivateTab)activate_tab
-                      pageProcess:(WebView::WebContentClient&)page_process
-                        pageIndex:(Compositing::PageId)page_index
+                      traversable:(WebView::CanonicalTraversable&)traversable
 {
     auto* delegate = (ApplicationDelegate*)[NSApp delegate];
 
     auto* controller = [delegate createChildTab:url
                                         fromTab:self
                                     activateTab:activate_tab
-                                    pageProcess:page_process
-                                      pageIndex:page_index];
+                                    traversable:traversable];
 
     auto* tab = (Tab*)[controller window];
     return [[tab web_view] handle];

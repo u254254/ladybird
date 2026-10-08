@@ -9,12 +9,13 @@
 #include <AK/Forward.h>
 #include <AK/Function.h>
 #include <AK/StringUtils.h>
-#include <LibCompositing/PageId.h>
+#include <LibWebCommon/Page/PageId.h>
 #include <LibGfx/Forward.h>
 #include <LibURL/Forward.h>
 #include <LibWebCommon/HTML/ActivateTab.h>
 #include <LibWebCommon/HTML/AudioPlayState.h>
 #include <LibWebView/BrowsingSession.h>
+#include <LibWebView/CanonicalTraversable.h>
 #include <LibWebView/Forward.h>
 
 #import <Cocoa/Cocoa.h>
@@ -26,8 +27,7 @@
 
 - (String const&)onCreateChildTab:(Optional<URL::URL> const&)url
                       activateTab:(Web::HTML::ActivateTab)activate_tab
-                      pageProcess:(WebView::WebContentClient&)page_process
-                        pageIndex:(Compositing::PageId)page_index;
+                      traversable:(WebView::CanonicalTraversable&)traversable;
 
 - (void)onLoadStart;
 - (void)onLoadFinish;
@@ -51,8 +51,7 @@
            isPrivate:(WebView::IsPrivate)is_private;
 - (instancetype)initAsChild:(id<LadybirdWebViewObserver>)observer
                      parent:(LadybirdWebView*)parent
-                pageProcess:(WebView::WebContentClient&)page_process
-                  pageIndex:(Compositing::PageId)page_index;
+                traversable:(WebView::CanonicalTraversable&)traversable;
 
 - (void)loadURL:(URL::URL const&)url;
 

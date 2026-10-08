@@ -136,10 +136,9 @@ static char s_tab_group_observation_context;
 - (nonnull TabController*)createChildTab:(Optional<URL::URL> const&)url
                                  fromTab:(nonnull Tab*)tab
                              activateTab:(Web::HTML::ActivateTab)activate_tab
-                             pageProcess:(WebView::WebContentClient&)page_process
-                               pageIndex:(Compositing::PageId)page_index
+                             traversable:(WebView::CanonicalTraversable&)traversable
 {
-    auto* controller = [self createChildTab:activate_tab fromTab:tab pageProcess:page_process pageIndex:page_index];
+    auto* controller = [self createChildTab:activate_tab fromTab:tab traversable:traversable];
 
     if (url.has_value()) {
         [controller loadURL:*url];
@@ -495,10 +494,9 @@ static char s_tab_group_observation_context;
 
 - (nonnull TabController*)createChildTab:(Web::HTML::ActivateTab)activate_tab
                                  fromTab:(nonnull Tab*)tab
-                             pageProcess:(WebView::WebContentClient&)page_process
-                               pageIndex:(Compositing::PageId)page_index
+                             traversable:(WebView::CanonicalTraversable&)traversable
 {
-    auto* controller = [[TabController alloc] initAsChild:tab pageProcess:page_process pageIndex:page_index];
+    auto* controller = [[TabController alloc] initAsChild:tab traversable:traversable];
     [self initializeTabController:controller
                       activateTab:activate_tab
                           fromTab:tab];

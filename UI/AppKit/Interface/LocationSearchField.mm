@@ -234,7 +234,7 @@ static NSImage* location_field_globe_icon()
     auto clipboard_text = pasteboard_text == nil
         ? String {}
         : Ladybird::ns_string_to_string(pasteboard_text);
-    auto has_search_engine_enabled = WebView::Application::settings().search_engine().has_value();
+    auto has_search_engine_enabled = WebView::Application::settings().search_engine_settings().engine.has_value();
     auto clipboard_holds_url = !clipboard_text.is_empty() && WebView::location_looks_like_url(clipboard_text);
     auto action_will_search = !clipboard_holds_url && has_search_engine_enabled;
 

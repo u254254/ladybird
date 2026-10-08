@@ -4,9 +4,11 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
+#include <AK/RefPtr.h>
 #include <LibCore/EventLoop.h>
 #include <LibWebView/Application.h>
 #include <LibWebView/BookmarkStore.h>
+#include <LibWebView/CanonicalTraversable.h>
 #include <LibWebView/DownloadPresentation.h>
 #include <LibWebView/FileDownloader.h>
 #include <LibWebView/Omnibox.h>
@@ -677,8 +679,7 @@ static NSInteger ns_index_for_selected_suggestion(Optional<size_t> selected_sugg
 @interface TabController () <NSToolbarDelegate, NSSearchFieldDelegate, AutocompleteObserver>
 {
     WebView::IsPrivate m_is_private;
-    RefPtr<WebView::WebContentClient> m_page_process;
-    Compositing::PageId m_page_index;
+    WebView::CanonicalTraversable* m_traversable;
 
     OwnPtr<WebView::Omnibox> m_omnibox;
     OwnPtr<PerformanceSettingsObserver> m_performance_settings_observer;
@@ -806,7 +807,6 @@ private:
         [self.toolbar setSizeMode:NSToolbarSizeModeRegular];
 
         m_is_private = is_private;
-        m_page_index = 0;
 
         m_is_applying_omnibox_display = false;
         m_fullscreen_requested_for_web_content = false;
@@ -860,14 +860,12 @@ private:
 }
 
 - (instancetype)initAsChild:(Tab*)parent
-                pageProcess:(WebView::WebContentClient&)page_process
-                  pageIndex:(Compositing::PageId)page_index
+                traversable:(WebView::CanonicalTraversable&)traversable
 {
     if (self = [self init:[parent isPrivate]]) {
         self.parent = parent;
 
-        m_page_process = page_process;
-        m_page_index = page_index;
+        m_traversable = &traversable;
         m_fullscreen_requested_for_web_content = false;
         m_fullscreen_exit_was_ui_initiated = true;
         m_fullscreen_should_restore_tab_bar = false;
@@ -1142,7 +1140,7 @@ private:
     auto& view = [[[self tab] web_view] view];
     view.set_next_history_visit_transition(WebView::HistoryVisitTransition::Omnibox);
     if (destination_kind == WebView::OmniboxDestinationKind::Search) {
-        if (auto url = WebView::sanitize_url(location, WebView::Application::settings().search_engine()); url.has_value())
+        if (auto url = WebView::sanitize_url(location, WebView::Application::settings().search_engine_settings().engine); url.has_value())
             view.load(*url);
         else
             view.load_navigation_error_page(location);
@@ -1564,7 +1562,7 @@ private:
 - (IBAction)showWindow:(id)sender
 {
     self.window = self.parent
-        ? [[Tab alloc] initAsChild:self.parent pageProcess:*m_page_process pageIndex:m_page_index]
+        ? [[Tab alloc] initAsChild:self.parent traversable:*m_traversable]
         : [[Tab alloc] init:m_is_private];
 
     [self.window setDelegate:self];
